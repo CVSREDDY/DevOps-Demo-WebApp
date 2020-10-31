@@ -1,5 +1,10 @@
-def COLOR_MAP = [...]
-def getBuildUser(){...}
+def COLOR_MAP = [
+    'SUCCESS': 'good', 
+    'FAILURE': 'danger',
+]
+def getBuildUser() {
+    return currentBuild.rawBuild.getCause(Cause.UserIdCause).getUserId()
+}
 
 pipeline {
       // Set up local variables for your pipeline
@@ -50,8 +55,8 @@ pipeline {
             script {
                 BUILD_USER = getBuildUser()
             }
-            echo 'I will always say hello in the console.'
-            slackSend channel: '#slack-test-channel',
+           
+            slackSend channel: '#alerts',
                 color: COLOR_MAP[currentBuild.currentResult],
                 message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} by ${BUILD_USER}\n More info at: ${env.BUILD_URL}"
         }
