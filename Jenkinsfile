@@ -11,7 +11,7 @@ pipeline {
     environment {
         // test variable: 0=success, 1=fail; must be string
         doError = '0'
-        BUILD_USER = ''
+        BUILD_USER = getBuildUser()
     }
   agent any
   stages {
@@ -51,11 +51,7 @@ pipeline {
   }
     // Post-build actions
     post {
-        always {
-            script {
-                BUILD_USER = getBuildUser()
-            }
-           
+        always {           
             slackSend channel: '#alerts',
                 color: COLOR_MAP[currentBuild.currentResult],
                 message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} by ${BUILD_USER}\n More info at: ${env.BUILD_URL}"
