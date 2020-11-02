@@ -15,13 +15,11 @@ pipeline {
     stage('SonarStaticCodeAnalysis') {
       environment {
         SCANNER_HOME = tool 'sonarqube'
-        ORGANIZATION = "devops-demo"
-        PROJECT_NAME = "jenkins-declarative-pipeline-demo"
+        PROJECT_NAME = "AVNCommunication Maven Webapp"
       }
       steps {
         withSonarQubeEnv('sonarserver') {
-          sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.organization=$ORGANIZATION \
-        -Dsonar.projectKey=$PROJECT_NAME \
+          sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=$PROJECT_NAME \
         -Dsonar.sources=. \
 		-Dsonar.tests=. \
 		-Dsonar.inclusions=**/test/java/servlet/createpage_junit.java \
