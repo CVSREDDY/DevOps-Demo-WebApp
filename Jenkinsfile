@@ -15,7 +15,7 @@ pipeline {
     stage('SonarStaticCodeAnalysis') {
       environment {
         SCANNER_HOME = tool 'sonarqube'
-        PROJECT_NAME = "AVNCommunication Maven Webapp"
+        PROJECT_NAME = 'AVNCommunication Maven Webapp'
       }
       steps {
         withSonarQubeEnv('sonarserver') {
