@@ -19,7 +19,7 @@ pipeline {
       }
       steps {
         withSonarQubeEnv('sonarserver') {
-          sh 'mvn clean package sonar:sonar'
+          sh 'Maven3.6.3 clean package sonar:sonar'
         }
       }
     }
