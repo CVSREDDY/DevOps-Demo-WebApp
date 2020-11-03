@@ -19,12 +19,7 @@ pipeline {
       }
       steps {
         withSonarQubeEnv('sonarserver') {
-          sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=$PROJECT_NAME \
-        -Dsonar.sources=. \
-		-Dsonar.tests=. \
-		-Dsonar.java.binaries=**/target/classes \
-		-Dsonar.inclusions=**/test/java/servlet/createpage_junit.java \
-		-Dsonar.test.exclusions=**/test/java/servlet/createpage_junit.java \
+          sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=$PROJECT_NAME \ 
 		-Dsonar.login=admin \
 		-Dsonar.password=admin"
         }
