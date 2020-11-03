@@ -1,31 +1,17 @@
 def COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger']
-def getBuildUser() {
-  return currentBuild.rawBuild.getCause(Cause.UserIdCause).getUserId()
-}
 
 pipeline {
   // Set up local variables for your pipeline
   environment {
     // test variable: 0=success, 1=fail; must be string
     doError = '0'
-    BUILD_USER = ''
   }
   agent any
   tools {
     maven 'Maven3.6.3'
+    jdk 'JDK'
   }
   stages {
-    stage('SonarStaticCodeAnalysis') {
-      environment {
-        SCANNER_HOME = tool 'sonarqube'
-        PROJECT_NAME = "AVNCommunication"
-      }
-      steps {
-        withSonarQubeEnv('sonarserver') {
-          sh 'Maven3.6.3 clean package sonar:sonar'
-        }
-      }
-    }
     stage('Stage 2') {
       steps {
         script {
@@ -42,7 +28,7 @@ pipeline {
       }
       steps {
         echo "Failure :("
-        error "Test failed on purpose, doError == str(1)"
+        error "Build failed on purpose, doError == str(1)"
       }
     }
     stage('Success') {
