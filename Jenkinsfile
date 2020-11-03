@@ -19,7 +19,7 @@ pipeline {
       }
       steps {
         withSonarQubeEnv('sonarserver') {
-          sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=$PROJECT_NAME \ 
+          sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=$PROJECT_NAME \
 		-Dsonar.login=admin \
 		-Dsonar.password=admin"
         }
