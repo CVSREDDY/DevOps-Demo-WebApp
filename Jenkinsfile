@@ -5,6 +5,9 @@ pipeline {
   environment {
     // test variable: 0=success, 1=fail; must be string
     doError = '0'
+    imagename = 'cvsreddy/devopsdemowebapp'
+    registryCredential = 'dockerhub'
+    dockerImage = ''
   }
   agent any
   tools {
@@ -12,10 +15,34 @@ pipeline {
     jdk 'JDK'
   }
   stages {
-    stage('Build') {
+    stage('BuildApplication') {
       steps {
         script {
-          sh 'mvn clean package -Dmaven.test.skip=true'
+          sh 'ls -ltr;mvn clean package -Dmaven.test.skip=true;ls -ltr'
+        }
+      }
+    }
+    stage('BuildDockerImage') {
+      steps {
+        script {
+          dockerImage = docker.build imagename
+        }
+      }
+    }
+    stage('PublishDockerImage') {
+      steps {
+        script {
+            docker.withRegistry( '', registryCredential ) {
+                dockerImage.push("$BUILD_NUMBER")
+                dockerImage.push('latest')
+          }
+        }
+      }
+    }
+    stage('RemoveUnusedDockerImage') {
+      steps {
+        script {
+          sh 'ls -ltr;docker rmi $imagename:$BUILD_NUMBER;ls -ltr;docker rmi $imagename:latest'
         }
       }
     }
