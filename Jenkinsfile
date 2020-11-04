@@ -12,10 +12,10 @@ pipeline {
     jdk 'JDK'
   }
   stages {
-    stage('Stage 2') {
+    stage('Build') {
       steps {
         script {
-          echo 'Stage 2'
+          sh 'mvn clean package -Dmaven.test.skip=true'
         }
       }
     }
