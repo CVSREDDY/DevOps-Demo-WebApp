@@ -54,8 +54,7 @@ pipeline {
         }
       }
       steps {
-        echo "Failure :("
-        error "Build failed on purpose, doError == str(1)"
+        echo "Build Failed :("
       }
     }
     stage('Success') {
@@ -66,7 +65,7 @@ pipeline {
         }
       }
       steps {
-        echo "Success :)"
+        echo "Build Success :)"
       }
     }
   }
