@@ -18,7 +18,7 @@ pipeline {
     stage('BuildApplication') {
       steps {
         script {
-          sh 'ls -ltr;mvn clean package -Dmaven.test.skip=true;ls -ltr'
+          sh 'mvn clean package -Dmaven.test.skip=true'
         }
       }
     }
@@ -42,10 +42,25 @@ pipeline {
     stage('RemoveUnusedDockerImage') {
       steps {
         script {
-          sh 'ls -ltr;docker rmi $imagename:$BUILD_NUMBER;ls -ltr;docker rmi $imagename:latest'
+          sh 'docker rmi $imagename:$BUILD_NUMBER;docker rmi $imagename:latest'
         }
       }
     }
+    stage('SanityTest') {
+      steps {
+        script {
+          sh 'sleep 2m;mvn test -f Acceptancetest/pom.xml'
+          publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\Acceptancetest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'SanityTest', reportTitles: ''])
+        }
+      }
+    }
+    stage('PerformanceTest') {
+      steps {
+        script {
+          blazeMeterTest credentialsId: 'blazemeter', testId: '8485081.taurus', workspaceId: '646447'
+        }
+      }
+    }    
     stage('Error') {
       // when doError is equal to 1, return an error
       when {
