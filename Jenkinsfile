@@ -46,17 +46,10 @@ pipeline {
         }
       }
     }
-    stage('SanityTest') {
-      steps {
-        script {
-          sh 'sleep 2m;mvn test -f Acceptancetest/pom.xml'
-          publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\Acceptancetest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'SanityTest', reportTitles: ''])
-        }
-      }
-    }
     stage('PerformanceTest') {
       steps {
         script {
+          sh 'sleep 2m'
           blazeMeterTest credentialsId: 'blazemeter', testId: '8485081.taurus', workspaceId: '646447'
         }
       }
