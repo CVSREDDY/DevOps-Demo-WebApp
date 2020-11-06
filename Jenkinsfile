@@ -57,8 +57,8 @@ pipeline {
     stage('PerformanceTest') {
       when {
         expression {
-			APP_DEPLOYED == 'yes'
-		}
+	  APP_DEPLOYED == 'yes'
+	}
       }	
       steps {
         script {
