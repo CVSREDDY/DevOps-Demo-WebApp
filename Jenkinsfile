@@ -8,6 +8,7 @@ pipeline {
     imagename = 'cvsreddy/devopsdemowebapp'
     registryCredential = 'dockerhub'
     dockerImage = ''
+    APP_DEPLOYED = ''
   }
   agent any
   tools {
@@ -46,10 +47,21 @@ pipeline {
         }
       }
     }
-    stage('PerformanceTest') {
+    stage('ApplicationDeployed?') {
       steps {
         script {
-          sh 'sleep 2m'
+            APP_DEPLOYED = input parameters: [choice(name: 'Is Application Deployed?', choices: 'no\nyes', description: 'Choose "yes" if you application deployed')]
+        }
+      }
+    }
+    stage('PerformanceTest') {
+      when {
+        expression {
+			APP_DEPLOYED == 'yes'
+		}
+      }	
+      steps {
+        script {
           blazeMeterTest credentialsId: 'blazemeter', testId: '8485081.taurus', workspaceId: '646447'
         }
       }
